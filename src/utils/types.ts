@@ -1,22 +1,25 @@
-export type Token = {
-  token_id: string;
-  outcome: string;
-  price: number;
-  winner: boolean;
+export type OutcomePrices = {
+  [key: string]: number;
 };
 
-export type Market = {
+export type PolymarketMarket = {
   question: string;
   active: boolean;
   archived: boolean;
   market_slug: string;
   description?: string;
-  tokens: Token[];
+  outcomePrices: OutcomePrices;
   [key: string]: any;
 };
 
-export type MarketWithOdds = Market & {
+export type MarketWithOdds = PolymarketMarket & {
   odds: Record<string, number>;
+};
+
+export type PolymarketSearchResponse = {
+  events: {
+    markets: PolymarketMarket[];
+  }[];
 };
 
 export type PredictItContract = {

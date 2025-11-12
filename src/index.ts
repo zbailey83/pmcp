@@ -35,7 +35,7 @@ server.tool(
     let kalshiMarkets: any[] = [];
 
     try {
-      polyMarkets = await getPolymarketPredictionData(50, keyword);
+      polyMarkets = await getPolymarketPredictionData(keyword);
     } catch (error) {
       errors.push(`Polymarket: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
