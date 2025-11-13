@@ -32,18 +32,31 @@ export async function getPolymarketPredictionData(
   return allMarkets
     .filter((market: PolymarketMarket) => market.active && !market.archived)
     .map((market: PolymarketMarket) => {
-      const outcomePrices = market.outcomePrices || {};
-      const totalPrice = Object.values(outcomePrices).reduce(
+      const outcomes =
+        typeof market.outcomes === "string"
+          ? JSON.parse(market.outcomes)
+          : market.outcomes;
+      const outcomePrices =
+        typeof market.outcomePrices === "string"
+          ? JSON.parse(market.outcomePrices)
+          : market.outcomePrices;
+
+      if (!outcomes || !outcomePrices) {
+        return { ...market, odds: {} };
+      }
+
+      const totalPrice = Object.values<number>(outcomePrices).reduce(
         (sum, price) => sum + price,
         0,
       );
 
       const odds: Record<string, number> = {};
-      for (const outcome in outcomePrices) {
-        odds[outcome] = totalPrice > 0 ? outcomePrices[outcome] / totalPrice : 0;
-      }
+      outcomes.forEach((outcome: string, index: number) => {
+        const price = outcomePrices[index] || 0;
+        odds[outcome] = totalPrice > 0 ? price / totalPrice : 0;
+      });
 
-      return { ...market, odds };
+      return { ...market, outcomes, odds };
     });
 }
 

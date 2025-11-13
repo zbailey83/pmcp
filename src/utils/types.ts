@@ -1,14 +1,11 @@
-export type OutcomePrices = {
-  [key: string]: number;
-};
-
 export type PolymarketMarket = {
   question: string;
   active: boolean;
   archived: boolean;
   market_slug: string;
   description?: string;
-  outcomePrices: OutcomePrices;
+  outcomes: string[];
+  outcomePrices: number[];
   [key: string]: any;
 };
 
